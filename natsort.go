@@ -14,8 +14,28 @@ func (s stringSlice) Len() int {
 }
 
 func (s stringSlice) Less(a, b int) bool {
-	chunksA := chunkify(s[a])
-	chunksB := chunkify(s[b])
+	return Compare(s[a], s[b])
+}
+
+func (s stringSlice) Swap(a, b int) {
+	s[a], s[b] = s[b], s[a]
+}
+
+func chunkify(s string) []string {
+	re, _ := regexp.Compile(`(\d+|\D+)`)
+
+	return re.FindAllString(s, -1)
+}
+
+// Sort sorts a list of strings in a natural order
+func Sort(l []string) {
+	sort.Sort(stringSlice(l))
+}
+
+// Compare returns true if the first string precedes the second one according to natural order
+func Compare(a, b string) bool {
+	chunksA := chunkify(a)
+	chunksB := chunkify(b)
 
 	nChunksA := len(chunksA)
 	nChunksB := len(chunksB)
@@ -58,19 +78,4 @@ func (s stringSlice) Less(a, b int) bool {
 	}
 
 	return false
-}
-
-func (s stringSlice) Swap(a, b int) {
-	s[a], s[b] = s[b], s[a]
-}
-
-func chunkify(s string) []string {
-	re, _ := regexp.Compile(`(\d+|\D+)`)
-
-	return re.FindAllString(s, -1)
-}
-
-// Sort sorts a list of strings in a natural order
-func Sort(l []string) {
-	sort.Sort(stringSlice(l))
 }
