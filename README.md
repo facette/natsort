@@ -2,7 +2,7 @@
 
 This is an implementation of the "Alphanum Algorithm" by [Dave Koelle][0] in Go.
 
-[![GoDoc](https://godoc.org/github.com/facette/natsort?status.svg)](https://godoc.org/github.com/facette/natsort)
+[![GoDoc](https://godoc.org/facette.io/natsort?status.svg)](https://godoc.org/facette.io/natsort)
 
 ## Usage
 
@@ -13,7 +13,7 @@ import (
     "fmt"
     "strings"
 
-    "github.com/facette/natsort"
+    "facette.io/natsort"
 )
 
 func main() {
