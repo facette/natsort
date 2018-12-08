@@ -6,45 +6,45 @@ import (
 	"testing"
 )
 
-func Test_Sort1(t *testing.T) {
-	testList := []string{
-		"1000X Radonius Maximus",
-		"10X Radonius",
-		"200X Radonius",
-		"20X Radonius",
-		"20X Radonius Prime",
-		"30X Radonius",
-		"40X Radonius",
-		"Allegia 50 Clasteron",
-		"Allegia 500 Clasteron",
-		"Allegia 50B Clasteron",
-		"Allegia 51 Clasteron",
-		"Allegia 6R Clasteron",
-		"Alpha 100",
-		"Alpha 2",
-		"Alpha 200",
-		"Alpha 2A",
-		"Alpha 2A-8000",
-		"Alpha 2A-900",
-		"Callisto Morphamax",
-		"Callisto Morphamax 500",
-		"Callisto Morphamax 5000",
-		"Callisto Morphamax 600",
-		"Callisto Morphamax 6000 SE",
-		"Callisto Morphamax 6000 SE2",
-		"Callisto Morphamax 700",
-		"Callisto Morphamax 7000",
-		"Xiph Xlater 10000",
-		"Xiph Xlater 2000",
-		"Xiph Xlater 300",
-		"Xiph Xlater 40",
-		"Xiph Xlater 5",
-		"Xiph Xlater 50",
-		"Xiph Xlater 500",
-		"Xiph Xlater 5000",
-		"Xiph Xlater 58",
-	}
+var testList = []string{
+	"1000X Radonius Maximus",
+	"10X Radonius",
+	"200X Radonius",
+	"20X Radonius",
+	"20X Radonius Prime",
+	"30X Radonius",
+	"40X Radonius",
+	"Allegia 50 Clasteron",
+	"Allegia 500 Clasteron",
+	"Allegia 50B Clasteron",
+	"Allegia 51 Clasteron",
+	"Allegia 6R Clasteron",
+	"Alpha 100",
+	"Alpha 2",
+	"Alpha 200",
+	"Alpha 2A",
+	"Alpha 2A-8000",
+	"Alpha 2A-900",
+	"Callisto Morphamax",
+	"Callisto Morphamax 500",
+	"Callisto Morphamax 5000",
+	"Callisto Morphamax 600",
+	"Callisto Morphamax 6000 SE",
+	"Callisto Morphamax 6000 SE2",
+	"Callisto Morphamax 700",
+	"Callisto Morphamax 7000",
+	"Xiph Xlater 10000",
+	"Xiph Xlater 2000",
+	"Xiph Xlater 300",
+	"Xiph Xlater 40",
+	"Xiph Xlater 5",
+	"Xiph Xlater 50",
+	"Xiph Xlater 500",
+	"Xiph Xlater 5000",
+	"Xiph Xlater 58",
+}
 
+func Test_Sort1(t *testing.T) {
 	testListSortedOK := []string{
 		"10X Radonius",
 		"20X Radonius",
@@ -82,7 +82,6 @@ func Test_Sort1(t *testing.T) {
 		"Xiph Xlater 5000",
 		"Xiph Xlater 10000",
 	}
-
 	testListSorted := testList[:]
 	Sort(testListSorted)
 
@@ -159,5 +158,11 @@ func Test_Sort2(t *testing.T) {
 
 	Got:
 %v`, strings.Join(testListSortedOK, "\n"), strings.Join(testListSorted, "\n"))
+	}
+}
+
+func BenchmarkSort1(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		Sort(testList)
 	}
 }
