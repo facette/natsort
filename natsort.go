@@ -41,6 +41,10 @@ func Compare(a, b string) bool {
 	nChunksB := len(chunksB)
 
 	for i := range chunksA {
+		if i >= nChunksB {
+			return false
+		}
+
 		aInt, aErr := strconv.Atoi(chunksA[i])
 		bInt, bErr := strconv.Atoi(chunksB[i])
 
