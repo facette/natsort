@@ -2,9 +2,8 @@
 package natsort
 
 import (
-	"regexp"
 	"sort"
-	"strconv"
+	"strings"
 )
 
 type stringSlice []string
@@ -21,12 +20,6 @@ func (s stringSlice) Swap(a, b int) {
 	s[a], s[b] = s[b], s[a]
 }
 
-var chunkifyRegexp = regexp.MustCompile(`(\d+|\D+)`)
-
-func chunkify(s string) []string {
-	return chunkifyRegexp.FindAllString(s, -1)
-}
-
 // Sort sorts a list of strings in a natural order
 func Sort(l []string) {
 	sort.Sort(stringSlice(l))
@@ -34,52 +27,87 @@ func Sort(l []string) {
 
 // Compare returns true if the first string precedes the second one according to natural order
 func Compare(a, b string) bool {
-	chunksA := chunkify(a)
-	chunksB := chunkify(b)
+	ln_a := len(a)
+	ln_b := len(b)
+	posa := 0
+	posb := 0
 
-	nChunksA := len(chunksA)
-	nChunksB := len(chunksB)
-
-	for i := range chunksA {
-		if i >= nChunksB {
+	for {
+		if ln_a <= posa {
+			if ln_b <= posb {
+				// eof on both at the same time (equal)
+				return false
+			}
+			return true
+		} else if ln_b <= posb {
+			// eof on b
 			return false
 		}
 
-		aInt, aErr := strconv.Atoi(chunksA[i])
-		bInt, bErr := strconv.Atoi(chunksB[i])
+		av, bv := a[posa], b[posb]
 
-		// If both chunks are numeric, compare them as integers
-		if aErr == nil && bErr == nil {
-			if aInt == bInt {
-				if i == nChunksA-1 {
-					// We reached the last chunk of A, thus B is greater than A
-					return true
-				} else if i == nChunksB-1 {
-					// We reached the last chunk of B, thus A is greater than B
-					return false
+		if av >= '0' && av <= '9' && bv >= '0' && bv <= '9' {
+			// go into numeric mode
+			intlna := 1
+			intlnb := 1
+			for {
+				if posa+intlna >= ln_a {
+					break
 				}
-
-				continue
+				x := a[posa+intlna]
+				if av == '0' {
+					posa += 1
+					av = x
+					continue
+				}
+				if x >= '0' && x <= '9' {
+					intlna += 1
+				} else {
+					break
+				}
 			}
-
-			return aInt < bInt
-		}
-
-		// So far both strings are equal, continue to next chunk
-		if chunksA[i] == chunksB[i] {
-			if i == nChunksA-1 {
-				// We reached the last chunk of A, thus B is greater than A
+			for {
+				if posb+intlnb >= ln_b {
+					break
+				}
+				x := b[posb+intlnb]
+				if bv == '0' {
+					posb += 1
+					bv = x
+					continue
+				}
+				if x >= '0' && x <= '9' {
+					intlnb += 1
+				} else {
+					break
+				}
+			}
+			if intlnb > intlna {
+				// length of a value is longer, means it's a bigger number
 				return true
-			} else if i == nChunksB-1 {
-				// We reached the last chunk of B, thus A is greater than B
+			} else if intlna > intlnb {
 				return false
 			}
-
+			// both have same length, let's compare as string
+			v := strings.Compare(a[posa:posa+intlna], b[posb:posb+intlnb])
+			if v < 0 {
+				return true
+			} else if v > 0 {
+				return false
+			}
+			// equale
+			posa += intlna
+			posb += intlnb
 			continue
 		}
 
-		return chunksA[i] < chunksB[i]
-	}
+		if av == bv {
+			posa += 1
+			posb += 1
+			continue
+		}
 
+		return av < bv
+	}
 	return false
 }

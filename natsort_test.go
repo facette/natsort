@@ -8,6 +8,7 @@ import (
 
 var testList = []string{
 	"1000X Radonius Maximus",
+	"000050X Radonius",
 	"10X Radonius",
 	"200X Radonius",
 	"20X Radonius",
@@ -51,6 +52,7 @@ func Test_Sort1(t *testing.T) {
 		"20X Radonius Prime",
 		"30X Radonius",
 		"40X Radonius",
+		"000050X Radonius",
 		"200X Radonius",
 		"1000X Radonius Maximus",
 		"Allegia 6R Clasteron",

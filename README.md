@@ -1,8 +1,35 @@
+[![GoDoc](https://godoc.org/facette.io/natsort?status.svg)](https://godoc.org/facette.io/natsort)
+
+
 # natsort: natural strings sorting in Go
 
-This is an implementation of the "Alphanum Algorithm" by [Dave Koelle][0] in Go.
+This is NOT an implementation of the "Alphanum Algorithm" by [Dave Koelle][0] in Go, but something slightly better.
 
-[![GoDoc](https://godoc.org/facette.io/natsort?status.svg)](https://godoc.org/facette.io/natsort)
+## Benchmark
+
+This was modified to use something else than chunks and Dave Koelle's algorithm. Not only the previous version used regular expressions to detect numbers, but it would also allocate extra memory to store the parsed values and was not optimized at all. This version is more optimized.
+
+### Before
+
+```
+goos: linux
+goarch: amd64
+pkg: github.com/MagicalTux/natsort
+cpu: Intel(R) Core(TM) i7-8700K CPU @ 3.70GHz
+BenchmarkSort1-12    	    6136	    300245 ns/op
+PASS
+```
+
+### After
+
+```
+goos: linux
+goarch: amd64
+pkg: github.com/MagicalTux/natsort
+cpu: Intel(R) Core(TM) i7-8700K CPU @ 3.70GHz
+BenchmarkSort1-12    	  606818	      2013 ns/op
+PASS
+```
 
 ## Usage
 
